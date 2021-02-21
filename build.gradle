@@ -149,9 +149,9 @@ def rpcUsersList = [
          'permissions' : ["ALL"]]
 ]
 def publishProjects = [
-        project(":diamond-contracts"),
-        project(":diamond-flows"),
-        project(":diamond-nodes")
+        project(":ticket-contracts"),
+        project(":ticket-flows"),
+        project(":ticket-nodes")
 ]
 
 configure(publishProjects) { subproject ->
