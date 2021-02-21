@@ -8,11 +8,11 @@ import net.corda.core.transactions.LedgerTransaction
 class FestivalTicketContract : EvolvableTokenContract(), Contract {
 
     override fun additionalCreateChecks(tx: LedgerTransaction) {
-        val outDiamond = tx.outputsOfType<FestivalTicketState>().first()
+        val outTicket = tx.outputsOfType<FestivalTicketState>().first()
     }
 
     override fun additionalUpdateChecks(tx: LedgerTransaction) {
-        val outDiamond = tx.outputsOfType<FestivalTicketState>().first()
+        val outTicket = tx.outputsOfType<FestivalTicketState>().first()
 
     }
 }

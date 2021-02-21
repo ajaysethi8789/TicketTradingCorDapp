@@ -8,7 +8,7 @@ apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
-jar.baseName = "diamond-flows"
+jar.baseName = "ticket-flows"
 
 sourceCompatibility = 1.8
 group 'com.r3'
@@ -27,7 +27,7 @@ cordapp {
         enabled false
     }
     workflow {
-        name "Diamonds"
+        name "Ticket"
         vendor "R3"
         licence "Apache License, Version 2.0"
         versionId 1
