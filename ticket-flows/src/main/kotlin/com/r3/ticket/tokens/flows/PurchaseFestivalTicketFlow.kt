@@ -41,13 +41,20 @@ import net.corda.core.utilities.unwrap
 @InitiatingFlow
 @StartableByRPC
 class PurchaseFestivalTicketFlow(
-        private val linearId: UniqueIdentifier,
-        private val dealer: AccountInfo,
-        private val buyer: AccountInfo,
-        private val amount: Amount<TokenType>) : FlowLogic<SignedTransaction>() {
+        private val ticketId: String,
+        private val dealerAcc: String,
+        private val buyerAcc: String,
+        private val amountVal: String) : FlowLogic<SignedTransaction>() {
     @Suspendable
     override fun call(): SignedTransaction {
-        requireThat { "Dealer not hosted on this node" using (dealer.host == ourIdentity) }
+        //requireThat { "Dealer not hosted on this node" using (dealer.host == ourIdentity) }
+
+        val dealer = main.retrieveAccount(dealerAcc)
+        val buyer = main.retrieveAccount(buyerAcc)
+
+        val linearId = main.retrieveState(ticketId) ?: throw IllegalArgumentException("Ticket ID not found")
+
+        val amount = Utilities.getAmount(amountVal)
 
         val ticketReportRef = getStateReference(serviceHub, FestivalTicketState::class.java, linearId)
         val ticketReportData = ticketReportRef.state.data
@@ -59,9 +66,9 @@ class PurchaseFestivalTicketFlow(
         // Check that the marker is not already present
         requireThat { "Report already in use" using (hasNoToken(serviceHub, markerType, ourIdentity)) }
 
-        if (buyer.host == ourIdentity){
-            return PurchaseFestivalTicketFlowWithinNode().call()
-        }
+//        if (buyer.host == ourIdentity){
+//            return PurchaseFestivalTicketFlowWithinNode().call()
+//        }
 
         val token = ticketPointer issuedBy ourIdentity
         val marker = markerType issuedBy ourIdentity heldBy ourIdentity

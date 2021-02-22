@@ -20,7 +20,7 @@ import net.corda.core.transactions.SignedTransaction
 /**
  * Self issues the amount of cash in the desired currency and pays the receiver
  */
-class CashIssueFlow(private val accounts: List<AccountInfo>, private val amounts: List<Amount<TokenType>>)
+class CashIssueFlow(private val receiver: String, private val amount: String)
     : FlowLogic<SignedTransaction>() {
 
     constructor(account: AccountInfo, amount: Amount<TokenType>) : this(listOf(account), listOf(amount))
@@ -29,6 +29,12 @@ class CashIssueFlow(private val accounts: List<AccountInfo>, private val amounts
     override fun call(): SignedTransaction {
         // Generate key for transaction, if receiver not on this
         // node then use sub-flow to request for key
+        val accounts = mutableListOf<AccountInfo>()
+        val amounts = mutableListOf<Amount<TokenType>>()
+
+        receivers.add(main.retrieveAccount(receiver))
+        amounts.add(Utilities.getAmount(amount))
+
         val tokens = accounts.map { accountInfo ->
             val key = if (accountInfo.host == ourIdentity) {
                 serviceHub.createKeyForAccount(accountInfo).owningKey
