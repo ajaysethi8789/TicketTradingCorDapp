@@ -23,7 +23,7 @@ import net.corda.core.transactions.SignedTransaction
 class CashIssueFlow(private val receiver: String, private val amount: String)
     : FlowLogic<SignedTransaction>() {
 
-    constructor(account: AccountInfo, amount: Amount<TokenType>) : this(listOf(account), listOf(amount))
+    constructor(receiver: String, amount: String) : this(listOf(account), listOf(amount))
 
     @Suspendable
     override fun call(): SignedTransaction {
